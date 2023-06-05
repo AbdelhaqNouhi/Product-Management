@@ -12,11 +12,16 @@ class RegisterController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        $validator = $request->all();
+        $data = $request->all();
 
-        $validator['password'] = bcrypt($request->password);
+        $data['password'] = bcrypt($request->password);
 
-        $user = User::create($validator);
+        $user = User::create($data);
+
+        $token = $user->createToken('token')->plainTextToken;
+
+        $user->remember_token = $token;
+        $user->save();
 
         return new RegisterResource($user);
     }
