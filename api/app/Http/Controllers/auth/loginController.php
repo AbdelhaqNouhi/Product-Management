@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\loginResource;
+use App\Http\Requests\LoginRequest;
 
 
 class loginController extends Controller
@@ -18,12 +18,22 @@ class loginController extends Controller
     {
         $validator = $request->all();
 
-        if (Auth::attempt($validator)) {
-            $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-            return new loginResource($user);
-        } else {
-            return response()->json(['message' => 'Invalid login credentials'], 401);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+
+            return response([
+                'message' => ['These credentials fail to match our records']
+            ], 404);
         }
+
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        return new loginResource($response);
     }
 }

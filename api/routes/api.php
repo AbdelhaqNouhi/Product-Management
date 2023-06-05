@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\login;
 use App\Http\Controllers\auth\loginController;
+use App\Http\Controllers\auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +28,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::post('/login', [loginController::class, 'login']);
+Route::post('/register', [RegisterController::class, 'register']);
 
