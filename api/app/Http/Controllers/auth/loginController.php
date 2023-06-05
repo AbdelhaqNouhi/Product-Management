@@ -26,14 +26,6 @@ class loginController extends Controller
                 'message' => ['These credentials fail to match our records']
             ], 404);
         }
-
-        $token = $user->createToken('authToken')->plainTextToken;
-
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return new loginResource($response);
+        return new loginResource($user);
     }
 }
