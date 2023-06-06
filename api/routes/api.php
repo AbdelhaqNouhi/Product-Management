@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\login;
 use App\Http\Controllers\auth\loginController;
 use App\Http\Controllers\auth\RegisterController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,19 @@ use App\Http\Controllers\auth\RegisterController;
 //     return $request->user();
 // });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('v1')->group(function () {
 
-//  protected routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
-
+        Route::get('product/search/{search}', [ProductController::class, 'search']);
+        Route::get('product', [ProductController::class, 'getAll']);
+        Route::post('product', [ProductController::class, 'store']);
+        Route::get('product/{product}', [ProductController::class, 'getById']);
+        Route::put('product/{product}', [ProductController::class, 'update']);
+        Route::delete('product/{product}', [ProductController::class, 'destroy']);
+    });
 });
 
-Route::post('/login', [loginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
+
 

@@ -14,6 +14,12 @@ class RegisterController extends Controller
     {
         $data = $request->all();
 
+        if(User::where('email', $request->email)->first()) {
+            return response([
+                'message' => ['This email is already exist']
+            ], 404);
+        }
+
         $data['password'] = bcrypt($request->password);
 
         $user = User::create($data);
