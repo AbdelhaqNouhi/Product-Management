@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\product\UpdateProductRequest;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\URL;;
+use Intervention\Image\Facades\Image;
+
 
 
 class ProductController extends Controller
@@ -35,9 +41,35 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $product = Product::create($request->all());
-        return new ProductResource($product);
+        $product = $request->all();
+
+        $image = $request['image'];
+        unset($product['image']);
+        $data = [
+            'data' => json_encode($product)
+        ];
+
+        $dir = 'images/' . Str::random() . '/';
+        $absolutePath = public_path($dir);
+        File::makeDirectory($absolutePath);
+
+        if($image instanceof UploadedFile){
+            $data['image'] = $image->getClientOriginalName();
+            $image->move($absolutePath, $data['image']);
+        } else {
+            $data['image'] = pathinfo($image, PATHINFO_BASENAME);
+            $newPath = $absolutePath . $data['image'];
+
+            copy($image, $newPath);
+        }
+
+        $product['image'] = URL::to('/') . '/' . $dir . $data['image'];
+
+        $create = Product::create($product);
+
+        return new ProductResource($create);
     }
+
 
     /**
      * Display the specified resource.
