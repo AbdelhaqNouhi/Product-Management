@@ -18,14 +18,22 @@ class loginController extends Controller
     {
         $validator = $request->all();
 
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-
+        if(!Auth::attempt($validator)){
             return response([
                 'message' => ['These credentials fail to match our records']
             ], 404);
         }
+        $user = Auth::user();
         return new loginResource($user);
+
+        // $user = User::where('email', $request->email)->first();
+
+        // if (!$user || !Hash::check($request->password, $user->password)) {
+
+        //     return response([
+        //         'message' => ['These credentials fail to match our records']
+        //     ], 404);
+        // }
+        // return new loginResource($user);
     }
 }

@@ -6,11 +6,11 @@
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="#" method="POST">
+    <form class="space-y-6" @click="login">
       <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
         <div class="mt-2">
-          <input id="email" name="email" type="email" autocomplete="email" placeholder="Email address" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="Email address" required v-model="user.email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
         </div>
       </div>
 
@@ -19,7 +19,7 @@
           <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
         </div>
         <div class="mt-2">
-          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Password" required v-model="user.password" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
         </div>
       </div>
 
@@ -37,9 +37,28 @@
 </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import { RouterLink } from "vue-router";
-export default {
-name: "Login",
+import store from "../store";
+import router from "../router";
+import { useRouter } from "vue-router";
+
+
+const user = {
+  email: '',
+  password: '',
 };
+
+
+const login = (e) => {
+  e.preventDefault();
+  store.dispatch('login', user)
+  .then((res) => {
+    setTimeout(() => {
+      router.push({name: 'Products'})
+    }, 1000)
+  })
+}
+
 </script>
