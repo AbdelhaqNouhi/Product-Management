@@ -4,6 +4,7 @@ import Register from '../views/Register.vue'
 import DefaultLayout from '../components/DefaultLayout.vue'
 import store from '../store/index.js'
 import Products from '../views/Products.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 const routes = [
     {
@@ -13,7 +14,8 @@ const routes = [
         component: DefaultLayout,
         meta: { requiresAuth: true },
         children: [
-            { path: '/Products', name: 'Products', component: Products, },
+            { path: '/Products', name: 'Products', component: Products },
+            {path: '/Dashboard', name: 'Dashboard', component: Dashboard },
         ]
     },
     {

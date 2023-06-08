@@ -23,7 +23,7 @@ class loginController extends Controller
                 'message' => ['These credentials fail to match our records !!']
             ], 404);
         }
-        
+
         $user = Auth::user();
         return new loginResource($user);
 

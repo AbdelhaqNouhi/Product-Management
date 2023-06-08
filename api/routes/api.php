@@ -18,9 +18,16 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
+
+// Route::middleware('auth:sanctum')->group(function() {
+//     Route::get('/user', function (Request $request) {
+//         return $request->user();
+//     });
+//     Route::post('/logout', [LoginController::class, 'logout']);
 // });
+
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/register', [RegisterController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
@@ -33,8 +40,4 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('product/{product}', [ProductController::class, 'destroy']);
     });
 });
-
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/register', [RegisterController::class, 'register']);
-
 
