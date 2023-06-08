@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\RegisterResource;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        $data = $request->all();
+        $validator = $request->all();
 
         if(User::where('email', $request->email)->first()) {
             return response([
@@ -22,7 +23,7 @@ class RegisterController extends Controller
 
         $data['password'] = bcrypt($request->password);
 
-        $user = User::create($data);
+        $user = User::create($validator);
 
         $token = $user->createToken('token')->plainTextToken;
 

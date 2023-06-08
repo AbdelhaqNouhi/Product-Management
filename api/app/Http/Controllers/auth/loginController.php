@@ -20,9 +20,10 @@ class loginController extends Controller
 
         if(!Auth::attempt($validator)){
             return response([
-                'message' => ['These credentials fail to match our records']
+                'message' => ['These credentials fail to match our records !!']
             ], 404);
         }
+        
         $user = Auth::user();
         return new loginResource($user);
 

@@ -4,31 +4,29 @@ import axiosClient from '../axios';
 const store = createStore({
     state: {
         user: {
-            data: {
-                    name: ''                //     email: 'tom@example.com',
-                //     imageUrl:
-                //         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-            },
-            token: localStorage.getItem('token') != null,
+            name: localStorage.getItem('user')  ,
+            imageUrl:
+                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+            token: localStorage.getItem('token'),
         },
     },
     getters: {},
     actions: {
         register({commit}, user) {
             return axiosClient.post('/register', user)
-            .then(data => {
-                commit('setUser', data);
-                return data;
+            .then(response => {
+                commit('setUser', response.data);
+                return response;
             });
         },
 
         login({commit}, user) {
             return axiosClient.post('/login', user)
-            .then(data => {
-                commit('setUser', data);
-                return data;
+            .then(response => {
+                commit('setUser', response.data);
+                return response;
             });
-        }
+        },
     },
     mutations: {
         logout: state => {
@@ -38,13 +36,15 @@ const store = createStore({
         },
 
         setUser: (state, user) => {
-            // console.log('state', state);
-            state.user.data = user.data;
+            state.user.name = user.data.user.name;
             state.user.token = user.data.token;
+            localStorage.setItem('user', state.user.name);
             localStorage.setItem('token', state.user.token);
+            console.log(user.data.user.name);   
         }
     },
     modules: {}
+
 });
 
 export default store;

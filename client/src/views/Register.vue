@@ -5,7 +5,7 @@
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" @click="register">
+    <form class="space-y-6" @submit="register">
         <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Full Name</label>
         <div class="mt-2">
@@ -56,12 +56,17 @@ const user = {
   password: '',
 }
 
-const register = () => {
+let errorMsg = ref('');
+
+const register = (e) => {
+  e.preventDefault()
   store.dispatch('register', user)
   .then((res) => {
-    setTimeout(() => {
       router.push({name: 'Products'})
-    }, 1000)
+  })
+  .catch((err) => {
+    console.log(err.response.data.message);
+    errorMsg.value = err.response.data.message.toString();
   })
 }
 

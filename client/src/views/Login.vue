@@ -5,8 +5,16 @@
     <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
   </div>
 
-  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" @click="login">
+  <div class="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form class="space-y-6" @submit="login">
+      <div v-if="errorMsg" class="flex items-center justify-between py-3 px-5 bg-red-400 text-white rounded">
+        {{ errorMsg }}
+        <span @click="errorMsg = ''" class="w-6 h-6 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)]">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </span>
+      </div>
       <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
         <div class="mt-2">
@@ -41,8 +49,8 @@
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import store from "../store";
-import router from "../router";
 import { useRouter } from "vue-router";
+import router from "../router";
 
 
 const user = {
@@ -50,14 +58,17 @@ const user = {
   password: '',
 };
 
+let errorMsg = ref('');
 
 const login = (e) => {
   e.preventDefault();
   store.dispatch('login', user)
   .then((res) => {
-    setTimeout(() => {
       router.push({name: 'Products'})
-    }, 1000)
+  })
+  .catch((err) => {
+    console.log(err.response.data.message);
+    errorMsg.value = err.response.data.message.toString();
   })
 }
 

@@ -123,7 +123,7 @@ export default {
     };
 
     return {
-      user: computed(() => store.state.user.data),
+      user: computed(() => store.state.user),
       navigation,
       logout
     };
