@@ -1,6 +1,57 @@
 import {createStore} from 'vuex';
 import axiosClient from '../axios';
 
+// const product = [
+//     {
+//         id: 2,
+//         name: 'Product 2',
+//         price: 200,
+//         image: 'https://www.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg',
+//         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
+//         type: 'type 2',
+//     },
+//     {
+//         id: 2,
+//         name: 'Product 2',
+//         price: 200,
+//         image: 'https://www.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg',
+//         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
+//         type: 'type 2',
+//     },
+//     {
+//         id: 2,
+//         name: 'Product 2',
+//         price: 200,
+//         image: 'https://www.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg',
+//         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
+//         type: 'type 2',
+//     },
+//     {
+//         id: 2,
+//         name: 'Product 2',
+//         price: 200,
+//         image: 'https://www.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg',
+//         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
+//         type: 'type 2',
+//     },
+//     {
+//         id: 2,
+//         name: 'Product 2',
+//         price: 200,
+//         image: 'https://www.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg',
+//         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
+//         type: 'type 2',
+//     },
+//     {
+//         id: 2,
+//         name: 'Product 2',
+//         price: 200,
+//         image: 'https://www.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg',
+//         description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.',
+//         type: 'type 2',
+//     },
+// ]
+
 const store = createStore({
     state: {
         user: {
@@ -9,6 +60,7 @@ const store = createStore({
                 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
             token: localStorage.getItem('token'),
         },
+        product: [],
     },
     getters: {},
     actions: {
@@ -27,7 +79,17 @@ const store = createStore({
                 return response;
             });
         },
+
+        getProduct({ commit }, product) {
+            return axiosClient.get('/product', product)
+                .then(response => {
+                    console.log(response.data.data);
+                    commit('getProduct', response.data.data);
+                    return response;
+                });
+            },
     },
+
     mutations: {
         logout: state => {
             state.user.data = {};
@@ -41,7 +103,12 @@ const store = createStore({
             localStorage.setItem('user', state.user.name);
             localStorage.setItem('token', state.user.token);
             console.log(user.data.user.name);   
-        }
+        },
+
+        getProduct: (state, product) => {
+            state.product = product;
+            console.log(state.product);
+        },
     },
     modules: {}
 

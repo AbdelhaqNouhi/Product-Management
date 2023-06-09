@@ -5,6 +5,7 @@ import DefaultLayout from '../components/DefaultLayout.vue'
 import store from '../store/index.js'
 import Products from '../views/Products.vue'
 import Dashboard from '../views/Dashboard.vue'
+import AddProduct from '../components/AddProduct.vue'
 
 const routes = [
     {
@@ -16,6 +17,7 @@ const routes = [
         children: [
             { path: '/Products', name: 'Products', component: Products },
             {path: '/Dashboard', name: 'Dashboard', component: Dashboard },
+            {path: '/AddProduct', name: 'AddProduct', component: AddProduct},
         ]
     },
     {
