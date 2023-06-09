@@ -32,7 +32,7 @@ class ProductController extends Controller
      */
     public function getAll()
     {
-        $products = Product::orderBy('id', 'desc')->paginate();
+        $products = Product::orderBy('id', 'desc')->paginate(3);
         return ProductResource::collection($products);
     }
 

@@ -155,7 +155,7 @@ const model = ref({
 
 
 if(route.params.id){
-    model.value = store.state.product.find((p) => p.id === parseInt(route.params.id));
+    model.value = store.state.product.data.find((p) => p.id === parseInt(route.params.id));
 }
 
 function onImageChoose(ev) {
