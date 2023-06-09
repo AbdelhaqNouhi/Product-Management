@@ -1,17 +1,9 @@
 <template>
     
     <div class="mt-4 sm:mx-auto sm:w-full sm:max-w-xl">
-    <form @click="UpdateProduct">
+    <form @submit.prevent="UpdateProduct">
         <div class="shadow sm:rounded-md sm:overflow-hidden">
             <h1 class="px-4 pt-5 text-3xl font-bold text-gray-900">Update Product</h1>
-            <div v-if="errorMsg" class="flex items-center justify-between py-3 px-5 bg-red-400 text-white rounded">
-                {{ errorMsg }}
-                <span @click="errorMsg = ''" class="w-6 h-6 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)]">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </span>
-            </div>
             <!-- Survey Fields -->
             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                 <!-- Image -->
@@ -21,8 +13,8 @@
                     </label>
                     <div class="mt-2 flex items-center">
                         <img
-                            v-if="model.image_url"
-                            :src="model.image_url"
+                            v-if="model.image"
+                            :src="model.image"
                             :alt="model.name"
                             class="w-64 h-48 object-cover rounded-md shadow-sm"
                         />
@@ -150,7 +142,7 @@ import router from "../router";
 
 
 const route = useRoute();
-let errorMsg = ref('');
+
 
 // create product
 const model = ref({
@@ -158,6 +150,7 @@ const model = ref({
     price: "",
     description: "",
     image: "",
+    type: "",
 });
 
 
@@ -174,15 +167,15 @@ function onImageChoose(ev) {
         model.value.image = reader.result;
 
         // The field to display here
-        model.value.image_url = reader.result;
+        model.value.image = reader.result;
         ev.target.value = "";
     };
     reader.readAsDataURL(file);
 }
 
 
-const UpdateProduct = (e) => {
-    e.preventDefault();
+const UpdateProduct = () => {
+    // e.preventDefault();
     store.dispatch("UpdateProduct", { id: route.params.id, product: model.value })
     .then(() => {
         router.push({ name: "Products" });

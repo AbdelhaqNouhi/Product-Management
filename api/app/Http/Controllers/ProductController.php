@@ -32,9 +32,10 @@ class ProductController extends Controller
      */
     public function getAll()
     {
-        $product = ProductResource::collection(Product::paginate());
-        return ($product);
+        $products = Product::orderBy('id', 'desc')->paginate();
+        return ProductResource::collection($products);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -82,9 +83,40 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    // public function update(UpdateProductRequest $request, Product $product)
+    // {
+    //     $product->update($request->all());
+    //     return new ProductResource($product);
+    // }
+
+    public function update(UpdateProductRequest $request, $id)
     {
-        $product->update($request->all());
+        $product = Product::findOrFail($id);
+        $productData = $request->all();
+
+        $image = $request['image'];
+        unset($productData['image']);
+        $data = [
+            'data' => json_encode($productData)
+        ];
+
+        $dir = 'images/' . Str::random() . '/';
+        $absolutePath = public_path($dir);
+        File::makeDirectory($absolutePath);
+
+        if ($image instanceof UploadedFile) {
+            $data['image'] = $image->getClientOriginalName();
+            $image->move($absolutePath, $data['image']);
+        } else {
+            $data['image'] = pathinfo($image, PATHINFO_BASENAME);
+            $newPath = $absolutePath . $data['image'];
+            copy($image, $newPath);
+        }
+
+        $productData['image'] = URL::to('/') . '/' . $dir . $data['image'];
+
+        $product->update($productData);
+
         return new ProductResource($product);
     }
 

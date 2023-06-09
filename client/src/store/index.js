@@ -89,6 +89,15 @@ const store = createStore({
                 });
             },
 
+        AddProduct({ commit }, product) {
+            return axiosClient.post('/product', product)
+                .then(response => {
+                    console.log(response.data.data);
+                    commit('AddProduct', response.data.data);
+                    return response;
+                });
+        },
+
         UpdateProduct({ commit }, { id, product }) {
             return axiosClient.put(`/product/${id}`, product)
                 .then(response => {
@@ -124,6 +133,10 @@ const store = createStore({
         },
 
         getProduct: (state, product) => {
+            state.product = product;
+        },
+
+        AddProduct: (state, product) => {
             state.product = product;
         },
 

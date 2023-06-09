@@ -4,7 +4,7 @@
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 <dir class="flex items-center justify-between">
                     <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-                    <div class=" flex justify-between items-center ">
+                    <div class=" flex justify-between items-center">
                     <router-link
                         :to="Dashboard"
                         class="p-2 text-white bg-emerald-600 rounded-md hover:bg-indigo-600  flex justify-between items-center"

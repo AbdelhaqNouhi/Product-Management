@@ -71,7 +71,3 @@ const register = (e) => {
 }
 
 </script>
-
-<style scoped>
-
-</style>

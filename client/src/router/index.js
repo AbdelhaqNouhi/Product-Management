@@ -6,6 +6,7 @@ import store from '../store/index.js'
 import Products from '../views/Products.vue'
 import Dashboard from '../views/Dashboard.vue'
 import UpdateProduct from '../components/UpdateProduct.vue'
+import AddProduct from '../components/AddProduct.vue'
 
 const routes = [
     {
@@ -17,9 +18,11 @@ const routes = [
         children: [
             { path: '/Products', name: 'Products', component: Products },
             {path: '/Dashboard', name: 'Dashboard', component: Dashboard },
-            {path: '/UpdateProduct', name: 'UpdateProduct', component: UpdateProduct},
+            
         ]
     },
+    { path: '/UpdateProduct', name: 'UpdateProduct', component: UpdateProduct },
+    { path: '/AddProduct', name: 'AddProduct', component: AddProduct },
     {
         path: '/Login',
         name: 'Login',
