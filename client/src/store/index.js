@@ -88,6 +88,24 @@ const store = createStore({
                     return response;
                 });
             },
+
+        UpdateProduct({ commit }, { id, product }) {
+            return axiosClient.put(`/product/${id}`, product)
+                .then(response => {
+                    console.log(response.data.data);
+                    commit('UpdateProduct', response.data.data);
+                    return response;
+                });
+        },
+
+        deleteProduct({ commit }, id) {
+            return axiosClient.delete(`/product/${id}`)
+            .then(response => {
+                console.log(response.data.data);
+                commit('deleteProduct', response.data.data);
+                return response;
+            });
+        },
     },
 
     mutations: {
@@ -107,8 +125,15 @@ const store = createStore({
 
         getProduct: (state, product) => {
             state.product = product;
-            console.log(state.product);
         },
+
+        UpdateProduct: (state, product) => {
+            state.product = product;
+        },
+
+        deleteProduct: (state, product) => {
+            state.product = product;
+        }
     },
     modules: {}
 

@@ -28,10 +28,10 @@ use App\Http\Controllers\ProductController;
 
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
-Route::get('product/search/{search}', [ProductController::class, 'search']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
+        Route::get('product/search/{search}', [ProductController::class, 'search']);
         Route::get('product', [ProductController::class, 'getAll']);
         Route::post('product', [ProductController::class, 'store']);
         Route::get('product/{product}', [ProductController::class, 'getById']);
