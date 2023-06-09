@@ -60,7 +60,11 @@ const store = createStore({
                 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
             token: localStorage.getItem('token'),
         },
-        product: [],
+        product: {
+            data: [],
+            links: [],
+            loading: false,
+        }
     },
     getters: {},
     actions: {
@@ -80,11 +84,13 @@ const store = createStore({
             });
         },
 
-        getProduct({ commit }, product) {
-            return axiosClient.get('/product', product)
+        getProduct({ commit}, {url = null} = {}) {
+            url = url || '/product';
+            commit('DataLoading', true);
+            return axiosClient.get(url)
                 .then(response => {
-                    console.log(response.data.data);
-                    commit('getProduct', response.data.data);
+                    commit('DataLoading', false);
+                    commit('getProduct', response.data);
                     return response;
                 });
             },
@@ -92,8 +98,7 @@ const store = createStore({
         AddProduct({ commit }, product) {
             return axiosClient.post('/product', product)
                 .then(response => {
-                    console.log(response.data.data);
-                    commit('AddProduct', response.data.data);
+                    commit('AddProduct', response.data);
                     return response;
                 });
         },
@@ -101,7 +106,6 @@ const store = createStore({
         UpdateProduct({ commit }, { id, product }) {
             return axiosClient.put(`/product/${id}`, product)
                 .then(response => {
-                    console.log(response.data.data);
                     commit('UpdateProduct', response.data.data);
                     return response;
                 });
@@ -110,7 +114,6 @@ const store = createStore({
         deleteProduct({ commit }, id) {
             return axiosClient.delete(`/product/${id}`)
             .then(response => {
-                console.log(response.data.data);
                 commit('deleteProduct', response.data.data);
                 return response;
             });
@@ -129,24 +132,28 @@ const store = createStore({
             state.user.token = user.data.token;
             localStorage.setItem('user', state.user.name);
             localStorage.setItem('token', state.user.token);
-            console.log(user.data.user.name);   
         },
 
         getProduct: (state, product) => {
-            state.product = product;
+            state.product.data = product.data;
+            state.product.links = product.meta.links;
         },
 
         AddProduct: (state, product) => {
-            state.product = product;
+            state.product.data = product.data;
         },
 
         UpdateProduct: (state, product) => {
-            state.product = product;
+            state.product.data = product;
         },
 
         deleteProduct: (state, product) => {
-            state.product = product;
-        }
+            state.product.data = product;
+        },
+
+        DataLoading: (state, loading) => {
+            state.product.loading = loading;
+        },
     },
     modules: {}
 

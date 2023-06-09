@@ -168,7 +168,6 @@ function onImageChoose(ev) {
 }
 
 const AddProduct = () => {
-    console.log(model.value);
     store.dispatch("AddProduct", model.value)
     .then(() => {
         router.push({ name: "Products" });
