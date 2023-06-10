@@ -65,12 +65,13 @@
                     <div
                         v-for="product in products.data"
                         :key="product.id"
-                        class="flex flex-col gap-4 py-4 px-6 bg-white shadow-md rounded-md hover:bg-gray-50"
+                        class="flex w-full flex-col gap-4 py-4 px-6 bg-white shadow-md rounded-md hover:bg-gray-50"
                     >
                         <img
                             :src="product.image"
                             alt=""
-                            class="w-full h-54 object-cover"
+                            class="w-full h-full object-cover"
+                            style="width: 300px; height: 200px;"
                         />
                         <div class="mt-4 flex justify-between items-center">
                             <h1 class="text-lg font-bold">
