@@ -84,6 +84,14 @@ const store = createStore({
             });
         },
 
+        searchProduct({ commit }, { search } ) {
+            return axiosClient.get(`/product/${search}`)
+            .then(response => {
+                    commit('searchProduct', response.data);
+                    return response;
+                });
+        },
+
         getProduct({ commit}, {url = null} = {}) {
             url = url || '/product';
             commit('DataLoading', true);
@@ -153,6 +161,10 @@ const store = createStore({
 
         DataLoading: (state, loading) => {
             state.product.loading = loading;
+        },
+
+        searchProduct: (state, product) => {
+            state.product.data = product.data;
         },
     },
     modules: {}
