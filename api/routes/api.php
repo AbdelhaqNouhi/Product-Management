@@ -30,12 +30,12 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
-
-        Route::get('product/{search}', [ProductController::class, 'search']);
-        Route::get('product', [ProductController::class, 'getAll']);
-        Route::post('product', [ProductController::class, 'store']);
-        Route::get('product/{product}', [ProductController::class, 'getById']);
-        Route::put('product/{product}', [ProductController::class, 'update']);
-        Route::delete('product/{product}', [ProductController::class, 'destroy']);
+    Route::get('product/filter/{filter}', [ProductController::class, 'filter']);
+    Route::get('product/search/{search}', [ProductController::class, 'search']);
+    Route::get('product', [ProductController::class, 'getAll']);
+    Route::post('product', [ProductController::class, 'store']);
+    Route::get('product/{product}', [ProductController::class, 'getById']);
+    Route::put('product/{product}', [ProductController::class, 'update']);
+    Route::delete('product/{product}', [ProductController::class, 'destroy']);
 });
 

@@ -19,13 +19,24 @@ class ProductController extends Controller
 {
     public function search (Product $product)
     {
-        $product = Product::where('name', 'like', '%' . request('search') . '%')->paginate();
+        $product = Product::where('name', 'like', '%' . request('search') . '%')->paginate(3);
 
         if($product->isEmpty()){
             return response(['message' => 'Product not found'], 404);
         }
         return ($product);
     }
+
+    public function filter (Product $product)
+    {
+        $product = Product::where('type', 'like', '%' . request('filter') . '%')->paginate(3);
+
+        if($product->isEmpty()){
+            return response(['message' => 'Product not found'], 404);
+        }
+        return ($product);
+    }
+    
 
     /**
      * Display a listing of the resource.
@@ -79,15 +90,6 @@ class ProductController extends Controller
     {
         return new ProductResource($product);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(UpdateProductRequest $request, Product $product)
-    // {
-    //     $product->update($request->all());
-    //     return new ProductResource($product);
-    // }
 
     public function update(UpdateProductRequest $request, $id)
     {

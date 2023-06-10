@@ -85,9 +85,18 @@ const store = createStore({
         },
 
         searchProduct({ commit }, { search } ) {
-            return axiosClient.get(`/product/${search}`)
+            return axiosClient.get(`/product/search/${search}`)
             .then(response => {
                     commit('searchProduct', response.data);
+                    return response;
+                });
+        },
+
+        filterProduct({ commit }, { filter }) {
+            console.log(filter);
+            return axiosClient.get(`/product/filter/${filter}`)
+                .then(response => {
+                    commit('filterProduct', response.data);
                     return response;
                 });
         },
@@ -164,6 +173,10 @@ const store = createStore({
         },
 
         searchProduct: (state, product) => {
+            state.product.data = product.data;
+        },
+
+        filterProduct: (state, product) => {
             state.product.data = product.data;
         },
     },

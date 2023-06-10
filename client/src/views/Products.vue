@@ -30,6 +30,47 @@
                         </div>
                     </div>
                 </div>
+                <div class="flex gap-8 items-center">
+                    <h1 class="font-bold text-indigo-600">Choose your type 👉</h1>
+                    <div class=" flex gap-8">
+                        <label class="flex items-center gap-3">
+                            All
+                            <input
+                                class="w-4 h-4"
+                                type="checkbox"
+                                :checked="checkedAll"
+                                @change="handleCheckboxChange_all"
+                            />
+                        </label>
+                        <label class="flex items-center gap-3">
+                            {{chocolate.label}}
+                            <input
+                                class="w-4 h-4"
+                                type="checkbox"
+                                :checked="checkedChocolate"
+                                @change="handleCheckboxChange_1"
+                            />
+                        </label>
+                        <label class="flex items-center gap-3">
+                            {{cake.label}}
+                            <input
+                                class="w-4 h-4"
+                                type="checkbox"
+                                :checked="checkedCake"
+                                @change="handleCheckboxChange_2"
+                            />
+                        </label>
+                        <label class="flex items-center gap-3">
+                            {{candy.label}}
+                            <input
+                                class="w-4 h-4"
+                                type="checkbox"
+                                :checked="checkedCandy"
+                                @change="handleCheckboxChange_3"
+                            />
+                        </label>
+                    </div>
+                </div>
                 <div class="flex justify-between items-center">
                     <router-link
                         :to="{ name: 'AddProduct' }"
@@ -71,7 +112,7 @@
                             :src="product.image"
                             alt=""
                             class="w-full h-full object-cover"
-                            style="width: 300px; height: 200px;"
+                            style="width: 300px; height: 200px"
                         />
                         <div class="mt-4 flex justify-between items-center">
                             <h1 class="text-lg font-bold">
@@ -81,10 +122,16 @@
                                 {{ product.price }} DH
                             </p>
                         </div>
-                        <div
-                            v-html="product.description"
-                            class="overflow-hidden"
-                        ></div>
+                        <div class="flex justify-between">
+                            <div
+                                v-html="product.description"
+                                class="overflow-hidden"
+                            >
+                            </div>
+                            <p class="text-lg text-gray-500 border-b border-gray-900">
+                                {{ product.type }}
+                            </p>
+                        </div>
                         <!-- <p class="p-2  border rounded-md">Typ: {{ product.type }}</p> -->
 
                         <div class="flex justify-between items-center my-5">
@@ -181,6 +228,71 @@ const route = useRouter();
 const products = computed(() => store.state.product);
 
 const search = ref("");
+
+const checkedChocolate = ref(false);
+const checkedCake = ref(false);
+const checkedCandy = ref(false);
+const checkedAll = ref(false);
+const chocolate = ref({ label: "Chocolate" });
+const cake = ref({ label: "Cake" });
+const candy = ref({ label: "Candy" });
+const typeValue = ref("");
+
+const handleCheckboxChange_1 = (event) => {
+    checkedChocolate.value = event.target.checked;
+    if (event.target.checked) {
+        checkedCake.value = false;
+        checkedCandy.value = false;
+        checkedAll.value = false;
+    }
+    typeValue.value = chocolate.value.label;
+    console.log(typeValue.value);
+    store.dispatch("filterProduct", { filter: typeValue.value })
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((err) => {
+            if (err.response.status === 401) {
+                products.value = [];
+            }
+        });
+};
+
+const handleCheckboxChange_2 = (event) => {
+    checkedCake.value = event.target.checked;
+    if (event.target.checked) {
+        checkedChocolate.value = false;
+        checkedCandy.value = false;
+        checkedAll.value = false;
+    }
+    typeValue.value = cake.value.label;
+
+    store.dispatch("filterProduct", { filter: typeValue.value })
+};
+
+const handleCheckboxChange_3 = (event) => {
+    checkedCandy.value = event.target.checked;
+    if (event.target.checked) {
+        checkedChocolate.value = false;
+        checkedCake.value = false;
+        checkedAll.value = false;
+    }
+    typeValue.value = candy.value.label;
+    
+    store.dispatch("filterProduct", { filter: typeValue.value });
+};
+
+const handleCheckboxChange_all = (event) => {
+    checkedAll.value = event.target.checked;
+    if (event.target.checked) {
+        checkedChocolate.value = false;
+        checkedCake.value = false;
+        checkedCandy.value = false;
+    }
+    typeValue.value = "";
+    store.dispatch("getProduct");
+};
+
 let timer = null;
 
 const setAutocomplete = async () => {
@@ -190,9 +302,10 @@ const setAutocomplete = async () => {
     }
 
     timer = setTimeout(async () => {
-        store.dispatch("searchProduct", { search: search.value })
+        store
+            .dispatch("searchProduct", { search: search.value })
             .then((response) => {
-                // console.log(response.data);
+                console.log(response.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -239,11 +352,16 @@ const getProducts = () => {
     store.dispatch("getProduct");
 };
 
+const getProductsByType = () => {
+    store.dispatch("getProductByType", { type: typeValue.value });
+};
+
 onMounted(() => {
     if (search.value.length > 0) {
         setAutocomplete();
     } else {
         getProducts();
+        checkedAll.value = true;
     }
 });
 </script>
