@@ -64,7 +64,7 @@ Run the project
 
 
 
-**It's look like this**
+**OverView**
 
 ![Alt Text](./api/public/images/screan/login.png)
 ![Alt Text](./api/public/images/screan/register.png)
