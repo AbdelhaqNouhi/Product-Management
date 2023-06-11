@@ -60,7 +60,8 @@ Run the project
 | `POST` | `http://localhost:8000/api/product` | **Create Product**|
 | `PUT` | `http://localhost:8000/api/product/id` | **Update Product**|
 | `DELETE` | `http://localhost:8000/api/product/id` | **Delete Product**|
-| `GET` | `http://localhost:8000/api/product/{text}` | **Search for Product**|
+| `GET` | `http://localhost:8000/api/product/search/{search}` | **Search for Product**|
+| `GET` | `http://localhost:8000/api/product/filter/{filter}` | **Filter for Product**|
 
 
 
